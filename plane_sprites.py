@@ -1,7 +1,7 @@
 import random
 import pygame
 
-# 屏幕大小的常量
+# 定义一个屏幕大小的常量
 SCREEN_RECT = pygame.Rect(0, 0, 480, 700)
 # 刷新的帧率
 FRAME_PER_SEC = 60

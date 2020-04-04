@@ -1,4 +1,5 @@
 import pygame
+# 一次性的导入 工具包
 from plane_sprites import *
 
 # 结束完我们的小测试以及知识点之后 ，现在正式的开始我们的开发
@@ -6,25 +7,31 @@ class PlaneGame(object):
     """飞机大战主游戏"""
 
     def __init__(self):
+        # 这里是指向私有方法，在初始化的时候
         print("游戏初始化")
 
-        # 1. 创建游戏的窗口
+        # 1. 绘制游戏的窗口
+        # 不要 把固定的数值写死，我们设置一个 常量 去保存它，这是一个开发技巧，怎么定义呢？
+        # 只需要使用赋值语句就完事 常量所有字母大小单词之间有下划线链接，python没有真正意义上的常量，我们通过命名的约定来搞一个，说白了就是约定俗成的方式，别人看到这种东西就知道这个表示的常量不会随意做修改，我们的常量全部定义在工具包中 ，二不是在主程序中
+        # 注意啊。SSCREEN_RECT是一个对象，我们通过对象.拿到size元祖
         self.screen = pygame.display.set_mode(SCREEN_RECT.size)
-        # 2. 创建游戏的时钟
+        # 2. 设置游戏的时钟，同样也是使用pygame的模块
         self.clock = pygame.time.Clock()
-        # 3. 调用私有方法，精灵和精灵组的创建
+        # 3. 调用私有方法，精灵和精灵组的创建，
         self.__create_sprites()
-
         # 4. 设置定时器事件 - 创建敌机　1s
         pygame.time.set_timer(CREATE_ENEMY_EVENT, 1000)
         pygame.time.set_timer(HERO_FIRE_EVENT, 500)
 
+# 注意私有方法 是一两个下划线开头
     def __create_sprites(self):
 
         # 创建背景精灵和精灵组
         bg1 = Background()
         bg2 = Background(True)
+        # 屏幕精灵
 
+        # 背景精灵组
         self.back_group = pygame.sprite.Group(bg1, bg2)
 
         # 创建敌机的精灵组
@@ -38,24 +45,25 @@ class PlaneGame(object):
         print("游戏开始...")
 
         while True:
+            # 以下的代码，都是独立出来的私有方法，以简化start_ganme的的业务逻辑从程度
             # 1. 设置刷新帧率
-            self.clock.tick(FRAME_PER_SEC)
+            self.clock.tick(FRAME_PER_SEC) # 注意你看这里的刷新频率也是一个常量
             # 2. 事件监听
             self.__event_handler()
             # 3. 碰撞检测
             self.__check_collide()
             # 4. 更新/绘制精灵组
             self.__update_sprites()
-            # 5. 更新显示
+            # 5. 更新显示，这这个非常的重要，
             pygame.display.update()
-
+# 以下的方法都是我们的私有方法
     def __event_handler(self):
-
+        # 监听用户是否点击了我们的突出按钮
         for event in pygame.event.get():
 
             # 判断是否退出游戏
             if event.type == pygame.QUIT:
-                PlaneGame.__game_over()
+                PlaneGame.__game_over() # 如何调用静态的方法？ 使用当前的类名点的方法就可以了
             elif event.type == CREATE_ENEMY_EVENT:
                 # print("敌机出场...")
                 # 创建敌机精灵
@@ -100,6 +108,14 @@ class PlaneGame(object):
         self.back_group.update()
         self.back_group.draw(self.screen)
 
+        # 调用它的两个方法 注意第二个方法要床底一个要绘制的地方（当前的屏幕对象）
+
+
+
+
+
+
+
         self.enemy_group.update()
         self.enemy_group.draw(self.screen)
 
@@ -109,6 +125,7 @@ class PlaneGame(object):
         self.hero.bullets.update()
         self.hero.bullets.draw(self.screen)
 
+    # 这的一个人静态方法，这个是一个修饰符，说明它是静态的方法
     @staticmethod
     def __game_over():
         print("游戏结束")
@@ -116,8 +133,8 @@ class PlaneGame(object):
         pygame.quit()
         exit()
 
+# 输入main 加入快捷键 就可以对这个文件执行倒出操作
 if __name__ == '__main__':
-
     # 创建游戏对象
     game = PlaneGame()
 
